@@ -8,6 +8,7 @@ import { config } from "https://deno.land/x/dotenv/mod.ts";
 const DENO_ENV = Deno.env.get("DENO_ENV") ?? "development";
 config({ path: `./.env.${DENO_ENV}`, export: true });
 
+const PORT = parseInt(Deno.env.get("PORT")) || 80;
 const scoresURL = Deno.env.get("scoresURL");
 
 const db = new Client(scoresURL);
@@ -24,7 +25,6 @@ const allowedHeaders = [
   "User-Agent",
 ];
 const allowedMethods = ["GET", "POST", "DELETE"];
-const PORT = parseInt(Deno.env.get("PORT")) || 80;
 
 const corsConfig = abcCors({
   origin: ["http://localhost:3000", "http://localhost"],
@@ -35,7 +35,6 @@ const corsConfig = abcCors({
 
 app.use(corsConfig);
 
-// Make paths
 app
   .get("/", home)
   .get("/scores", getScores)
@@ -91,6 +90,25 @@ function checkValidParams(conditionals) {
   return allKeysInTable ? true : false;
 }
 
-async function postScore(server) {}
+async function postScore(server) {
+  const { score, word, username } = await server.body;
+  if (!score || !word || !username) {
+    return server.json(
+      {
+        response:
+          "Item(s) missing, need username, word and score for a valid request.",
+      },
+      400
+    );
+  }
+
+  const query = `INSERT INTO scores
+                 (score, created_at, word, username)
+                 VALUES
+                 ($1, current_timestamp, $2, $3)
+                ;`;
+  await db.queryArray({ text: query, args: [score, word, username] });
+  return server.json({ response: "score successfully added" }, 200);
+}
 
 console.log(`Server running on http://localhost:${PORT}`);
