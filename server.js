@@ -1,7 +1,5 @@
 import { Application } from "https://deno.land/x/abc/mod.ts";
 import { abcCors } from "https://deno.land/x/cors/mod.ts";
-import * as bcrypt from "https://deno.land/x/bcrypt@v0.3.0/mod.ts";
-import { v4 } from "https://deno.land/std/uuid/mod.ts";
 import { Client } from "https://deno.land/x/postgres@v0.11.3/mod.ts";
 import { config } from "https://deno.land/x/dotenv/mod.ts";
 
@@ -10,10 +8,10 @@ import { config } from "https://deno.land/x/dotenv/mod.ts";
 const DENO_ENV = Deno.env.get("DENO_ENV") ?? "development";
 config({ path: `./.env.${DENO_ENV}`, export: true });
 
-const userDataURL = Deno.env.get("userDataURL");
+const scoresURL = Deno.env.get("scoresURL");
 
-const user_db = new Client(userDataURL);
-await user_db.connect();
+const db = new Client(scoresURL);
+await db.connect();
 
 //set up app
 
@@ -48,20 +46,49 @@ async function home(server) {
   server.json({ response: "server running" }, 200);
 }
 
-// /scores?user=username&date=date&word=word
+// /scores?username=username&date=date&word=word
 async function getScores(server) {
   const conditionals = server.queryParams;
+  const paramsPresent = JSON.stringify(conditionals) !== "{}";
   let query = `SELECT * FROM scores`;
 
-  if (conditionals) {
-    query += " WHERE ";
-    Object.keys(conditionals).forEach((param, i) => {
-      query += `${i > 0 ? " AND" : ""} ${param} = ${conditionals[param]}`;
-    });
+  if (paramsPresent) {
+    const paramsAreValid = checkValidParams(conditionals);
+    if (paramsAreValid) {
+      query += " WHERE ";
+      let paramCounter = 1;
+
+      Object.keys(conditionals).forEach((param, i) => {
+        query += `${i > 0 ? " AND" : ""} ${param} = $${paramCounter}`;
+        paramCounter++;
+      });
+    } else {
+      return server.json(
+        {
+          response:
+            "Invalid query params. Allowed params are username, word or date",
+        },
+        400
+      );
+    }
   }
 
-  console.log(query);
-  server.json({ conditionals });
+  const scores = (
+    await db.queryObject({
+      text: query,
+      args: Object.values(conditionals),
+    })
+  ).rows;
+
+  server.json({ scores }, 200);
+}
+
+function checkValidParams(conditionals) {
+  const validParams = ["username", "word", "date"];
+  const allKeysInTable = Object.keys(conditionals).every((key) =>
+    validParams.includes(key)
+  );
+  return allKeysInTable ? true : false;
 }
 
 async function postScore(server) {}
