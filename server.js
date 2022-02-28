@@ -39,7 +39,31 @@ app.use(corsConfig);
 
 // Make paths
 app
-  .get("/", async (server) => server.json({ response: "server running" }, 200))
+  .get("/", home)
+  .get("/scores", getScores)
+  .post("/scores", postScore)
   .start({ port: PORT });
+
+async function home(server) {
+  server.json({ response: "server running" }, 200);
+}
+
+// /scores?user=username&date=date&word=word
+async function getScores(server) {
+  const conditionals = server.queryParams;
+  let query = `SELECT * FROM scores`;
+
+  if (conditionals) {
+    query += " WHERE ";
+    Object.keys(conditionals).forEach((param, i) => {
+      query += `${i > 0 ? " AND" : ""} ${param} = ${conditionals[param]}`;
+    });
+  }
+
+  console.log(query);
+  server.json({ conditionals });
+}
+
+async function postScore(server) {}
 
 console.log(`Server running on http://localhost:${PORT}`);
