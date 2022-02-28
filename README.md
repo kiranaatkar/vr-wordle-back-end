@@ -5,18 +5,9 @@
 - [Introduction](#introduction)
 - [Technologies](#technologies)
 - [Launch](#launch)
-- [User Authentication](#user-authentication)
-  - [Creating a session ID](#creating-a-session-id)
-  - [Find a current user’s ID](#find-a-current-users-id)
-  - [Registering a user](#registering-a-user)
-  - [Validating a user log-in](#validating-a-user-log-in)
-- [Country indicators](#country-indicators)
-  - [Get all indicators on a country](#get-all-indicators-on-a-country)
-  - [Find certain indicators on a country](#find-certain-indicators-on-a-country)
-  - [Search for indicators in a specific timeframe](#search-for-indicators-in-a-specific-timeframe)
-- [User’s searches in the database](#users-searches-in-the-database)
-  - [Add a user's search to the database](#add-a-users-search-to-the-database)
-  - [Get a the user’s search history](#get-a-users-search-history)
+- [Server Endpoints](#server-endpoints)
+  - [Retrieve Scores](#retrieve-scores)
+  - [Submit a score](#submit-a-score)
 - [Database Schema](#database-schema)
 - [License](#license)
 - [Developers](#developers)
@@ -64,7 +55,7 @@ If the query params are not 'word', 'date' or 'username', the server will respon
 
 If no query params are included then **all** scores will be returned.
 
-### Add a user's score to the database
+### Submit a score
 
 Everytime a user wins a game, their score is stored along with the correct word, the date of submission, and the username of the player.
 
