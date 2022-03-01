@@ -27,7 +27,7 @@ const allowedHeaders = [
 const allowedMethods = ["GET", "POST", "DELETE"];
 
 const corsConfig = abcCors({
-  origin: ["http://localhost:3000", "http://localhost"],
+  origin: "*",
   Headers: allowedHeaders,
   Methods: allowedMethods,
   credentials: true,
@@ -39,13 +39,13 @@ app
   .get("/", home)
   .get("/scores", getScores)
   .post("/scores", postScore)
+  .delete("/scores/:id", deleteScore)
   .start({ port: PORT });
 
 async function home(server) {
   server.json({ response: "server running" }, 200);
 }
 
-// /scores?username=username&date=date&word=word
 async function getScores(server) {
   const conditionals = server.queryParams;
   const paramsPresent = JSON.stringify(conditionals) !== "{}";
@@ -109,6 +109,14 @@ async function postScore(server) {
                 ;`;
   await db.queryArray({ text: query, args: [score, word, username] });
   return server.json({ response: "score successfully added" }, 200);
+}
+
+// Used in test file to remove test score
+async function deleteScore(server) {
+  const { id } = server.params;
+  const query = `DELETE FROM scores WHERE id = $1`;
+  await db.queryArray({ text: query, args: [id] });
+  return server.json({ response: "score entry deleted" }, 200);
 }
 
 console.log(`Server running on http://localhost:${PORT}`);

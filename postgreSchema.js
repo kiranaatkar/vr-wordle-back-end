@@ -27,7 +27,7 @@ await client.queryArray(
   `INSERT INTO scores
   (score, created_at, word, username)
    VALUES
-   (3, CURRENT_DATE, 'choke', 'player1')
+   (3, CURRENT_DATE, 'rupee', 'mixup692')
 ;`
 );
 
@@ -35,7 +35,7 @@ await client.queryArray(
   `INSERT INTO scores
   (score, created_at, word, username)
    VALUES
-   (2, CURRENT_DATE, 'choke', 'player2')
+   (2, CURRENT_DATE, 'rupee', 'gautea650')
 ;`
 );
 
@@ -43,7 +43,7 @@ await client.queryArray(
   `INSERT INTO scores
   (score, created_at, word, username)
    VALUES
-   (3, CURRENT_DATE, 'choke', 'player3')
+   (3, CURRENT_DATE, 'rupee', 'polyphonic722')
 ;`
 );
 
@@ -51,7 +51,7 @@ await client.queryArray(
   `INSERT INTO scores
   (score, created_at, word, username)
    VALUES
-   (4, CURRENT_DATE, 'choke', 'player4')
+   (4, CURRENT_DATE, 'rupee', 'kimbell915')
 ;`
 );
 
@@ -59,7 +59,7 @@ await client.queryArray(
   `INSERT INTO scores
   (score, created_at, word, username)
    VALUES
-   (4, CURRENT_DATE, 'choke', 'player5')
+   (4, CURRENT_DATE, 'rupee', 'grampus253')
 ;`
 );
 
@@ -67,7 +67,7 @@ await client.queryArray(
   `INSERT INTO scores
   (score, created_at, word, username)
    VALUES
-   (4, CURRENT_DATE, 'choke', 'player6')
+   (4, CURRENT_DATE, 'rupee', 'lille622')
 ;`
 );
 
@@ -75,7 +75,7 @@ await client.queryArray(
   `INSERT INTO scores
   (score, created_at, word, username)
    VALUES
-   (3, CURRENT_DATE, 'choke', 'player7')
+   (3, CURRENT_DATE, 'rupee', 'anemone861')
 ;`
 );
 
@@ -83,7 +83,7 @@ await client.queryArray(
   `INSERT INTO scores
   (score, created_at, word, username)
    VALUES
-   (3, CURRENT_DATE, 'choke', 'player8')
+   (3, CURRENT_DATE, 'rupee', 'forsta166')
 ;`
 );
 
@@ -91,6 +91,6 @@ await client.queryArray(
   `INSERT INTO scores
   (score, created_at, word, username)
    VALUES
-   (3, CURRENT_DATE, 'choke', 'player9')
+   (3, CURRENT_DATE, 'rupee', 'libratory153')
 ;`
 );
