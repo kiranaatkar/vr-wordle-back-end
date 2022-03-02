@@ -1,8 +1,8 @@
-import { Client } from "https://deno.land/x/postgres@v0.11.3/mod.ts";
+import { Client } from 'https://deno.land/x/postgres@v0.11.3/mod.ts';
 
 //set up connection
 const client = new Client(
-  "postgres://ftqrgoav:V9PQwGYE8XO7yOe9ndcoLrBCeJ5tFrrM@tyke.db.elephantsql.com/ftqrgoav"
+  'postgres://ftqrgoav:V9PQwGYE8XO7yOe9ndcoLrBCeJ5tFrrM@tyke.db.elephantsql.com/ftqrgoav'
 );
 await client.connect();
 
@@ -23,74 +23,47 @@ await client.queryArray(
 
 //Put in seed data
 
-await client.queryArray(
-  `INSERT INTO scores
-  (score, created_at, word, username)
-   VALUES
-   (3, CURRENT_DATE, 'rupee', 'mixup692')
-;`
-);
+const answers = [
+  { word: 'chant', date: '2022/02/27' },
+  { word: 'choke', date: '2022/02/28' },
+  { word: 'rupee', date: '2022/03/01' },
+  { word: 'nasty', date: '2022/03/02' },
+  { word: 'mourn', date: '2022/03/03' },
+  { word: 'ahead', date: '2022/03/04' },
+  { word: 'brine', date: '2022/03/05' },
+];
 
-await client.queryArray(
-  `INSERT INTO scores
-  (score, created_at, word, username)
-   VALUES
-   (2, CURRENT_DATE, 'rupee', 'gautea650')
-;`
-);
+const randomUsers = [
+  'mixup692',
+  'gateau650',
+  'polyphonic722',
+  'kimbell915',
+  'grampus293',
+  'lille622',
+  'anemone861',
+  'forsta166',
+  'libratory153',
+];
 
-await client.queryArray(
-  `INSERT INTO scores
-  (score, created_at, word, username)
-   VALUES
-   (3, CURRENT_DATE, 'rupee', 'polyphonic722')
-;`
-);
+const getRandomNumber = () => {
+  return Math.floor(Math.random() * 6 + 1);
+};
 
-await client.queryArray(
-  `INSERT INTO scores
-  (score, created_at, word, username)
-   VALUES
-   (4, CURRENT_DATE, 'rupee', 'kimbell915')
-;`
-);
-
-await client.queryArray(
-  `INSERT INTO scores
-  (score, created_at, word, username)
-   VALUES
-   (4, CURRENT_DATE, 'rupee', 'grampus253')
-;`
-);
-
-await client.queryArray(
-  `INSERT INTO scores
-  (score, created_at, word, username)
-   VALUES
-   (4, CURRENT_DATE, 'rupee', 'lille622')
-;`
-);
-
-await client.queryArray(
-  `INSERT INTO scores
-  (score, created_at, word, username)
-   VALUES
-   (3, CURRENT_DATE, 'rupee', 'anemone861')
-;`
-);
-
-await client.queryArray(
-  `INSERT INTO scores
-  (score, created_at, word, username)
-   VALUES
-   (3, CURRENT_DATE, 'rupee', 'forsta166')
-;`
-);
-
-await client.queryArray(
-  `INSERT INTO scores
-  (score, created_at, word, username)
-   VALUES
-   (3, CURRENT_DATE, 'rupee', 'libratory153')
-;`
-);
+randomUsers.forEach((user) => {
+  answers.forEach(async (answer) => {
+    const score =
+      (getRandomNumber() +
+        getRandomNumber() +
+        getRandomNumber() +
+        getRandomNumber() +
+        getRandomNumber()) /
+      5;
+    await client.queryArray(
+      `INSERT INTO scores
+      (score, created_at, word, username)
+      VALUES
+      (${score}, '${answer.date}', '${answer.word}', '${user}')
+      ;`
+    );
+  });
+});
