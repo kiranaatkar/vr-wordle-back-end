@@ -45,9 +45,19 @@ const randomUsers = [
   'libratory153',
 ];
 
+const getRandomNumber = () => {
+  return Math.floor(Math.random() * 6 + 1);
+};
+
 randomUsers.forEach((user) => {
   answers.forEach(async (answer) => {
-    const score = Math.floor(Math.random() * 6 + 1);
+    const score =
+      (getRandomNumber() +
+        getRandomNumber() +
+        getRandomNumber() +
+        getRandomNumber() +
+        getRandomNumber()) /
+      5;
     await client.queryArray(
       `INSERT INTO scores
       (score, created_at, word, username)
