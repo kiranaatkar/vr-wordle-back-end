@@ -73,7 +73,8 @@ await client.queryArray(`DROP TABLE IF EXISTS guesses CASCADE`);
 await client.queryArray(
   `CREATE TABLE guesses (
   id SERIAL UNIQUE PRIMARY KEY,
-  created_at TEXT NOT NULL,
+  username TEXT NOT NULL,
+  date TEXT NOT NULL,
   guess_1 TEXT,
   guess_2 TEXT,
   guess_3 TEXT,
