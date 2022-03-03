@@ -143,7 +143,6 @@ async function postGuess(server) {
 }
 
 async function updateGuess(server) {
-  console.log("hello");
   const { username, date, guess, count } = await server.body;
   if (!username || !date || !guess || !count) {
     return server.json(
@@ -159,7 +158,7 @@ async function updateGuess(server) {
                 SET guess_${count} = $1
                 WHERE username = $2 AND date = $3;`;
   await db.queryArray({ text: query, args: [guess, username, date] });
-  return server.json({ response: "guess successfully added" }, 200);
+  return getGuesses(server);
 }
 
 async function getGuesses(server) {
