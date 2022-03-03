@@ -1,8 +1,8 @@
-import { Client } from 'https://deno.land/x/postgres@v0.11.3/mod.ts';
+import { Client } from "https://deno.land/x/postgres@v0.11.3/mod.ts";
 
 //set up connection
 const client = new Client(
-  'postgres://ftqrgoav:V9PQwGYE8XO7yOe9ndcoLrBCeJ5tFrrM@tyke.db.elephantsql.com/ftqrgoav'
+  "postgres://ftqrgoav:V9PQwGYE8XO7yOe9ndcoLrBCeJ5tFrrM@tyke.db.elephantsql.com/ftqrgoav"
 );
 await client.connect();
 
@@ -24,25 +24,25 @@ await client.queryArray(
 //Put in seed data
 
 const answers = [
-  { word: 'chant', date: '2022/02/27' },
-  { word: 'choke', date: '2022/02/28' },
-  { word: 'rupee', date: '2022/03/01' },
-  { word: 'nasty', date: '2022/03/02' },
-  { word: 'mourn', date: '2022/03/03' },
-  { word: 'ahead', date: '2022/03/04' },
-  { word: 'brine', date: '2022/03/05' },
+  { word: "chant", date: "2022/02/27" },
+  { word: "choke", date: "2022/02/28" },
+  { word: "rupee", date: "2022/03/01" },
+  { word: "nasty", date: "2022/03/02" },
+  { word: "mourn", date: "2022/03/03" },
+  { word: "ahead", date: "2022/03/04" },
+  { word: "brine", date: "2022/03/05" },
 ];
 
 const randomUsers = [
-  'mixup692',
-  'gateau650',
-  'polyphonic722',
-  'kimbell915',
-  'grampus293',
-  'lille622',
-  'anemone861',
-  'forsta166',
-  'libratory153',
+  "mixup692",
+  "gateau650",
+  "polyphonic722",
+  "kimbell915",
+  "grampus293",
+  "lille622",
+  "anemone861",
+  "forsta166",
+  "libratory153",
 ];
 
 const getRandomNumber = () => {
@@ -67,3 +67,18 @@ randomUsers.forEach((user) => {
     );
   });
 });
+
+await client.queryArray(`DROP TABLE IF EXISTS guesses CASCADE`);
+
+await client.queryArray(
+  `CREATE TABLE guesses (
+  id SERIAL UNIQUE PRIMARY KEY,
+  created_at TEXT NOT NULL,
+  guess_1 TEXT,
+  guess_2 TEXT,
+  guess_3 TEXT,
+  guess_4 TEXT,
+  guess_5 TEXT, 
+  guess_6 TEXT
+  );`
+);

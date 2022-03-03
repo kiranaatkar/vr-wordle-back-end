@@ -119,4 +119,42 @@ async function deleteScore(server) {
   return server.json({ response: "score entry deleted" }, 200);
 }
 
+async function postGuess(server) {
+  const { username, date, guess_1 } = await server.body;
+  if (!username || !date || !guess) {
+    return server.json(
+      {
+        response:
+          "Item(s) missing, need username, date, and guess for a valid request.",
+      },
+      400
+    );
+  }
+
+  const query = `INSERT INTO guesses
+                (username, date, guess_1)
+                VALUES
+                ($1, $2, $3);`;
+  await db.queryArray({ text: query, args: [username, date, guess_1] });
+}
+
+async function updateGuess(server) {
+  const { username, date, guess, count } = await server.body;
+  if (!username || !date || !guess || !count) {
+    return server.json(
+      {
+        response:
+          "Item(s) missing, need username, date, guess and count for a valid request.",
+      },
+      400
+    );
+  }
+
+  const query = `UPDATE guesses
+                SET guess_${count} = $1
+                WHERE username = $2 AND date = $3;`;
+  await db.queryArray({ text: query, args: [guess, username, date] });
+  return server.json({ response: "guess successfully added" }, 200);
+}
+
 console.log(`Server running on http://localhost:${PORT}`);
