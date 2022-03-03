@@ -162,7 +162,7 @@ async function updateGuess(server) {
 }
 
 async function getGuesses(server) {
-  const { username, date } = await server.body;
+  const { username, date } = await server.queryParams;
   if (!username || !date) {
     return server.json(
       {
