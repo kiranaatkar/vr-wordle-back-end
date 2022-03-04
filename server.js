@@ -72,7 +72,7 @@ async function getScores(server) {
     }
   }
 
-  query += ` ORDER BY score ASC, game_time DESC`;
+  query += ` ORDER BY score ASC, game_time ASC`;
 
   const scores = (
     await db.queryObject({
