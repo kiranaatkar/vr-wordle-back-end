@@ -31,7 +31,7 @@ const suite = new TestSuite({
 test(suite, '/scores returns all scores in db', async () => {
   const response = await fetch(`${apiURL}/scores`);
   const json = await response.json();
-  assertEquals(json.scores.length, 63);
+  assertEquals(json.scores.length >= 63, true);
 });
 
 // ---------- QUERY PARAMS ---------- //
@@ -75,7 +75,7 @@ test(suite, 'invalid query params throw error', async () => {
 // ---------- ADDING SCORE ---------- //
 
 test(suite, 'score adds successfully to db', async () => {
-  const [score, word, username] = [2, 'choke', 'cranwell276'];
+  const [score, word, username, gameTime] = [2, 'choke', 'cranwell276', 280000];
 
   // Add score to db
   const postRequest = await fetch(`${apiURL}/scores`, {
@@ -87,6 +87,7 @@ test(suite, 'score adds successfully to db', async () => {
       score,
       word,
       username,
+      gameTime,
     }),
   });
 
@@ -110,7 +111,7 @@ test(suite, 'score adds successfully to db', async () => {
 });
 
 test(suite, 'missing entry items throws error', async () => {
-  const [score, word, username] = ['', '', 'cranwell276'];
+  const [score, word, username, gameTime] = ['', '', 'cranwell276', 28000];
 
   const postRequest = await fetch(`${apiURL}/scores`, {
     method: 'POST',
@@ -121,12 +122,13 @@ test(suite, 'missing entry items throws error', async () => {
       score,
       word,
       username,
+      gameTime,
     }),
   });
 
   const postRequestJson = await postRequest.json();
   assertEquals(
     postRequestJson.response,
-    'Item(s) missing, need username, word and score for a valid request.'
+    'Item(s) missing, need username, word, score and game time for a valid request.'
   );
 });
