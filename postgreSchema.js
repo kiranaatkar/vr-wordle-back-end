@@ -17,7 +17,8 @@ await client.queryArray(
   score INTEGER NOT NULL,
   created_at DATE NOT NULL,
   word TEXT NOT NULL,
-  username TEXT NOT NULL
+  username TEXT NOT NULL,
+  game_time INTEGER NOT NULL
   );`
 );
 
@@ -49,6 +50,10 @@ const getRandomNumber = () => {
   return Math.floor(Math.random() * 6 + 1);
 };
 
+const getRandomGameTime = () => {
+  return Math.floor(Math.random() * (800 - 100 + 1) + 100);
+};
+
 randomUsers.forEach((user) => {
   answers.forEach(async (answer) => {
     const score =
@@ -60,9 +65,11 @@ randomUsers.forEach((user) => {
       5;
     await client.queryArray(
       `INSERT INTO scores
-      (score, created_at, word, username)
+      (score, created_at, word, username, game_time)
       VALUES
-      (${score}, '${answer.date}', '${answer.word}', '${user}')
+      (${score}, '${answer.date}', '${
+        answer.word
+      }', '${user}', ${getRandomGameTime()})
       ;`
     );
   });

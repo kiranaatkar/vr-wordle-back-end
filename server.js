@@ -72,7 +72,7 @@ async function getScores(server) {
     }
   }
 
-  query += ` ORDER BY score ASC, created_at DESC`;
+  query += ` ORDER BY score ASC, game_time DESC`;
 
   const scores = (
     await db.queryObject({
@@ -93,23 +93,23 @@ function checkValidParams(conditionals) {
 }
 
 async function postScore(server) {
-  const { score, word, username } = await server.body;
-  if (!score || !word || !username) {
+  const { score, word, username, gameTime } = await server.body;
+  if (!score || !word || !username || gameTime) {
     return server.json(
       {
         response:
-          'Item(s) missing, need username, word and score for a valid request.',
+          'Item(s) missing, need username, word, score and game time for a valid request.',
       },
       400
     );
   }
 
   const query = `INSERT INTO scores
-                 (score, created_at, word, username)
+                 (score, created_at, word, username, game_time)
                  VALUES
-                 ($1, current_timestamp, $2, $3)
+                 ($1, current_timestamp, $2, $3, $4)
                 ;`;
-  await db.queryArray({ text: query, args: [score, word, username] });
+  await db.queryArray({ text: query, args: [score, word, username, gameTime] });
   return server.json({ response: 'score successfully added' }, 200);
 }
 
