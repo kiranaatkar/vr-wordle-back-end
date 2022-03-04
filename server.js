@@ -27,7 +27,6 @@ const allowedHeaders = [
 const allowedMethods = ['GET', 'POST', 'DELETE'];
 
 const corsConfig = abcCors({
-  origin: '*',
   Headers: allowedHeaders,
   Methods: allowedMethods,
   credentials: true,

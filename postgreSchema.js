@@ -51,7 +51,7 @@ const getRandomNumber = () => {
 };
 
 const getRandomGameTime = () => {
-  return Math.floor(Math.random() * (800 - 100 + 1) + 100);
+  return Math.floor(Math.random() * (800000 - 50000 + 1) + 100000);
 };
 
 randomUsers.forEach((user) => {
