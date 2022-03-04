@@ -24,7 +24,6 @@ const allowedHeaders = [
   'Origin',
   'User-Agent',
 ];
-
 const allowedMethods = ['GET', 'POST', 'DELETE'];
 
 const corsConfig = abcCors({
@@ -36,13 +35,10 @@ const corsConfig = abcCors({
 app.use(corsConfig);
 
 app
-  .get("/", home)
-  .get("/scores", getScores)
-  .get("/guesses", getGuesses)
-  .post("/scores", postScore)
-  .post("/guesses", postGuess)
-  .post("/updateGuesses", updateGuess)
-  .delete("/scores/:id", deleteScore)
+  .get('/', home)
+  .get('/scores', getScores)
+  .post('/scores', postScore)
+  .delete('/scores/:id', deleteScore)
   .start({ port: PORT });
 
 async function home(server) {
@@ -122,65 +118,6 @@ async function deleteScore(server) {
   const query = `DELETE FROM scores WHERE id = $1`;
   await db.queryArray({ text: query, args: [id] });
   return server.json({ response: 'score entry deleted' }, 200);
-}
-
-async function postGuess(server) {
-  const { username, date, guess_1 } = await server.body;
-  if (!username || !date || !guess_1) {
-    return server.json(
-      {
-        response:
-          "Item(s) missing, need username, date, and guess for a valid request.",
-      },
-      400
-    );
-  }
-
-  const query = `INSERT INTO guesses
-                (username, date, guess_1)
-                VALUES
-                ($1, $2, $3);`;
-  await db.queryArray({ text: query, args: [username, date, guess_1] });
-  return server.json({ response: "guess successfully added" }, 200);
-}
-
-async function updateGuess(server) {
-  const { username, date, guess, count } = await server.body;
-  if (!username || !date || !guess || !count) {
-    return server.json(
-      {
-        response:
-          "Item(s) missing, need username, date, guess and count for a valid request.",
-      },
-      400
-    );
-  }
-
-  const query = `UPDATE guesses
-                SET guess_${count} = $1
-                WHERE username = $2 AND date = $3;`;
-  await db.queryArray({ text: query, args: [guess, username, date] });
-  return server.json({ response: "guess successfully updated" }, 200);
-}
-
-async function getGuesses(server) {
-  const { username, date } = await server.queryParams;
-  if (!username || !date) {
-    return server.json(
-      {
-        response:
-          "Item(s) missing, need username and date for a valid request.",
-      },
-      400
-    );
-  }
-
-  const query = `SELECT * FROM guesses
-                WHERE username = $1 AND date = $2;`;
-  const guesses = (
-    await db.queryObject({ text: query, args: [username, date] })
-  ).rows;
-  return server.json({ guesses }, 200);
 }
 
 console.log(`Server running on http://localhost:${PORT}`);
