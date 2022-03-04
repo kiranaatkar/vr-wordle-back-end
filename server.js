@@ -158,7 +158,7 @@ async function updateGuess(server) {
                 SET guess_${count} = $1
                 WHERE username = $2 AND date = $3;`;
   await db.queryArray({ text: query, args: [guess, username, date] });
-  return getGuesses(server);
+  return server.json({ response: "guess successfully updated" }, 200);
 }
 
 async function getGuesses(server) {
