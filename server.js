@@ -94,7 +94,7 @@ function checkValidParams(conditionals) {
 
 async function postScore(server) {
   const { score, word, username, gameTime } = await server.body;
-  if (!score || !word || !username || gameTime) {
+  if (!score || !word || !username || !gameTime) {
     return server.json(
       {
         response:
